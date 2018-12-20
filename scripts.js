@@ -44,8 +44,51 @@ let context = canvas.getContext("2d");
 
 // a constructor(code in JS for a class)
 // uses capital letter
-function Ball(x, y){
+function Ball(x, y, r){
     // inside of a constructor, we get the keyword :"this"
     this.x = x;
     this.y = y
+    // sr = starting radius
+    this.sr = 0;
+    // ER = ending radius
+    this.er = Math.PI * 2;
+    this.r = r;
+    this.xDirection = 1;
+    this.yDirection = 1;
 }
+// new = making an object from a class
+// prototype will give all Balls a drawball method
+Ball.prototype.drawBall = function(){
+    context.beginPath();
+    context.arc(this.x, this.y, this.r, this.sr, this.er);
+    context.fill();
+};
+
+aBall = new Ball(100,100,50);
+anotherBall = new Ball (400,400,100);
+thirdBall = new Ball(90, 200, 40);
+
+Ball.prototype.updateBallPosition = function(){
+    // clearRect takes 4 args like rect....wipes the screen
+    context.clearRect(0,0,500,500);
+    if(this.x >= 500){
+        this.xDirection = -this.xDirection;
+    }else if(this.x <= 0){
+        this.xDirection = -this.xDirection;
+    }
+    if(this.y >= 500){
+        this.yDirection = -this.yDirection;
+    }else if(this.y <= 0){
+        this.yDirection = -this.yDirection;
+    }
+    this.drawBall();
+    this.x += 5 * this.xDirection;
+    this.y += 5 * this.yDirection;
+}
+
+let bouncyBalls = [aBall, anotherBall, thirdBall];
+bouncyBalls.forEach((currentBall)=>{
+    setInterval(()=>{
+        currentBall.updateBallPosition();
+    },33);
+});
